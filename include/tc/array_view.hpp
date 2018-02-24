@@ -78,7 +78,7 @@ namespace tc {
 		(
 			ContiguousIterator begin,
 			ContiguousIterator end
-		) noexcept(noexcept(*begin) && noexcept(end - begin) && noexcept(std::addressof(*begin))) :
+		) noexcept(noexcept(end - begin) && noexcept(*begin) && noexcept(std::addressof(*begin))) :
 			_size(end - begin)
 		{
 			if(_size == 0) {
