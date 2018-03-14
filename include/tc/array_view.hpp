@@ -31,6 +31,9 @@ namespace tc {
 	class array_view {
 		
 	public:
+	
+		/* Member type aliases */
+	
 		using value_type = T;
 		using size_type = std::size_t;
 		using reference = value_type&;
@@ -43,6 +46,9 @@ namespace tc {
 		using reverse_iterator = std::reverse_iterator<iterator>;
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
+		
+		/* Special members */
+		
 		// Destructor.
 		~array_view
 		() = default;
@@ -102,6 +108,8 @@ namespace tc {
 		{}
 
 
+		/* Operators */
+		
 		// Simple assignment operator - copy.
 		array_view& operator=
 		(
@@ -122,7 +130,9 @@ namespace tc {
 		{
 			return _pointer[index];
 		}
-
+		
+		
+		/* General member functions */
 
 		// Bounds checked element access.
 		reference at

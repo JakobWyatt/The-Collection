@@ -31,6 +31,9 @@ namespace tc {
 	class vector_view {
 		
 	public:
+	
+		/* Member type aliases */
+	
 		using value_type = T;
 		using size_type = std::size_t;
 		using reference = value_type&;
@@ -43,6 +46,9 @@ namespace tc {
 		using reverse_iterator = std::reverse_iterator<iterator>;
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
+		
+		/* Special members */
+		
 		// Destructor.
 		~vector_view
 		() = default;
@@ -101,6 +107,8 @@ namespace tc {
 			_size(std::size(container))
 		{}
 
+		
+		/* Operators */
 
 		// Simple assignment operator - copy.
 		vector_view& operator=
@@ -123,6 +131,8 @@ namespace tc {
 			return _pointer[index - 1];
 		}
 
+		
+		/* General member functions */
 
 		// Bounds checked element access.
 		reference at
