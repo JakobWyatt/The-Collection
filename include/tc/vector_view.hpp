@@ -1,9 +1,6 @@
 #pragma once
 
-
-#include <cstddef>			// std::size_t
-#include <iterator>			// std::data(), std::size(), std::reverse_iterator
-#include <memory>			// std::pointer_traits, std::addressof()
+#include "array_view.hpp"
 #include <stdexcept>		// std::out_of_range
 
 
@@ -24,7 +21,9 @@ namespace tc {
 		Class definitions
 	*/
 
-	// Non-owning view of a contiguous array for use as a mathematical vector.
+	/* Non-owning view of a contiguous array for use as a mathematical vector.
+		Simply forwards the functionality of `array_view`, except that elements are 1-indexed.
+	*/
 	template<
 		typename T
 	>
@@ -34,17 +33,17 @@ namespace tc {
 	
 		/* Member type aliases */
 	
-		using value_type = T;
-		using size_type = std::size_t;
-		using reference = value_type&;
-		using const_reference = value_type const&;
-		using pointer = value_type*;
-		using const_pointer = value_type const*;
-		using difference_type = typename std::pointer_traits<pointer>::difference_type;
-		using iterator = pointer;
-		using const_iterator = const_pointer;
-		using reverse_iterator = std::reverse_iterator<iterator>;
-		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+		using value_type = typename array_view<T>::value_type;
+		using size_type = typename array_view<T>::size_type;
+		using reference = typename array_view<T>::reference;
+		using const_reference = typename array_view<T>::const_reference;
+		using pointer = typename array_view<T>::pointer;
+		using const_pointer = typename array_view<T>::const_pointer;
+		using difference_type = typename array_view<T>::difference_type;
+		using iterator = typename array_view<T>::iterator;
+		using const_iterator = typename array_view<T>::const_iterator;
+		using reverse_iterator = typename array_view<T>::reverse_iterator;
+		using const_reverse_iterator = typename array_view<T>::const_reverse_iterator;
 
 		
 		/* Special members */
@@ -55,11 +54,8 @@ namespace tc {
 
 		// Default constructor.
 		vector_view
-		() noexcept :
-			_pointer(nullptr),
-			_size(0)
-		{}
-
+		() = default;
+		
 		// Copy constructor.
 		vector_view
 		(
@@ -71,9 +67,8 @@ namespace tc {
 		(
 			pointer pointer,
 			size_type size
-		) noexcept :
-			_pointer(pointer),
-			_size(size)
+		) noexcept(noexcept(array_view<T>::array_view(pointer, size))) :
+			_array_view(pointer, size)
 		{}
 		
 		// Constructor from contiguous iterator range.
@@ -84,16 +79,9 @@ namespace tc {
 		(
 			ContiguousIterator begin,
 			ContiguousIterator end
-		) noexcept(noexcept(end - begin) && noexcept(*begin) && noexcept(std::addressof(*begin))) :
-			_size(end - begin)
-		{
-			if(_size == 0) {
-				_pointer = nullptr;
-			}
-			else {
-				_pointer = std::addressof(*begin);
-			}
-		}
+		) noexcept(noexcept(array_view<T>::array_view(begin, end))) :
+			_array_view(begin, end)
+		{}
 
 		// Constructor from generic contiguous container.
 		template<
@@ -102,9 +90,8 @@ namespace tc {
 		vector_view
 		(
 			Container& container
-		) noexcept(noexcept(std::data(container)) && noexcept(std::size(container))) :
-			_pointer(std::data(container)),
-			_size(std::size(container))
+		) noexcept(noexcept(array_view<T>::array_view(container))) :
+			array_view(container)
 		{}
 
 		
@@ -126,9 +113,9 @@ namespace tc {
 		reference operator[]
 		(
 			size_type index
-		) const noexcept
+		) const noexcept(noexcept(_array_view[index - 1]))
 		{
-			return _pointer[index - 1];
+			return _array_view[index - 1];
 		}
 
 		
@@ -140,98 +127,97 @@ namespace tc {
 			size_type index
 		) const
 		{
-			if (index < 1 || index >= _size) {
+			if (index < 1) {
 				throw std::out_of_range("Specified index out of bounds.");
 			}
-			return _pointer[index];
+			else {
+				return _array_view.at(index - 1);
+			}
 		}
 
 		// Accesses the last element of the view.
 		reference back
-		() const noexcept
+		() const noexcept(noexcept(_array_view.back()))
 		{
-			return _pointer[_size - 1];
+			return _array_view.back();
 		}
 
 		// Gets an iterator to the beginning of the view.
 		iterator begin
-		() const noexcept
+		() const noexcept(noexcept(_array_view.begin()))
 		{
-			return _pointer;
+			return _array_view.begin();
 		}
 
 		// Gets a read-only iterator to the beginning of the view.
 		const_iterator cbegin
-		() const noexcept
+		() const noexcept(noexcept(_array_view.cbegin()))
 		{
-			return _pointer;
+			return _array_view.cbegin();
 		}
 
 		// Gets a read-only iterator to the element following the last element of the view.
 		const_iterator cend
-		() const noexcept
+		() const noexcept(noexcept(_array_view.cend()))
 		{
-			return _pointer + _size;
+			return _array_view.cend();
 		}
 
 		// Gets a read-only reverse iterator to the beginning of the reversed view.
 		const_reverse_iterator crbegin
-		() const noexcept(noexcept(const_reverse_iterator{ this->cend() }))
+		() const noexcept(noexcept(_array_view.crbegin()))
 		{
-			// std::reverse_iterator constructor is explicit
-			return const_reverse_iterator{ this->cend() };
+			return _array_view.crbegin();
 		}
 
 		// Gets a read-only reverse iterator to the end of the reversed view.
 		const_reverse_iterator crend
-		() const noexcept(noexcept(const_reverse_iterator{ this->cbegin() }))
+		() const noexcept(noexcept(_array_view.crend()))
 		{
-			// std::reverse_iterator constructor is explicit
-			return const_reverse_iterator{ this->cbegin() };
+			return _array_view.crend();
 		}
 
 		// Gets a pointer to the viewed array data
 		pointer data
-		() const noexcept
+		() const noexcept(noexcept(_array_view.data()))
 		{
-			return _pointer;
+			return _array_view.data();
 		}
 
 		// Checks if the view's size is 0.
 		bool empty
-		() const noexcept
+		() const noexcept(noexcept(_array_view.empty()))
 		{
-			return _size == 0;
+			return _array_view.empty();
 		}
 
 		// Gets an iterator to the element following the last element of the view.
 		iterator end
-		() const noexcept
+		() const noexcept(noexcept(_array_view.end()))
 		{
-			return _pointer + _size;
+			return _array_view.end();
 		}
 
 		// Accesses the first element of the view.
 		reference front
-		() const noexcept
+		() const noexcept(noexcept(_array_view.front()))
 		{
-			return _pointer[0];
+			return _array_view.front();
 		}
 
 		// Gets a reverse iterator to the beginning of the reversed view.
 		reverse_iterator rbegin
-		() const noexcept(noexcept(reverse_iterator{ this->end() }))
+		() const noexcept(noexcept(_array_view.rbegin()))
 		{
 			// std::reverse_iterator constructor is explicit
-			return reverse_iterator{ this->end() };
+			return _array_view.rbegin();
 		}
 
 		// Gets a reverse iterator to the end of the reversed view.
 		reverse_iterator rend
-		() const noexcept(noexcept(reverse_iterator{ this->begin() }))
+		() const noexcept(noexcept(_array_view.rend()))
 		{
-			// std::reverse_iterator constructor is explicit
-			return reverse_iterator{ this->begin() };
+			return _array_view.rend();
 		}
 
 
@@ -239,26 +225,25 @@ namespace tc {
 		void shrink_back
 		(
 			size_type count
-		) noexcept
+		) noexcept(noexcept(_array_view.shrink_back(count)))
 		{
-			_size -= count;
+			_array_view.shrink_back(count);
 		}
 
 		// Shrinks the viewed data area from the front.
 		void shrink_front
 		(
 			size_type count
-		) noexcept
+		) noexcept(noexcept(_array_view.shrink_front(count)))
 		{
-			_pointer += count;
-			_size -= count;
+			_array_view.shrink_front(count);
 		}
 
 		// Size getter.
 		size_type size
-		() const noexcept
+		() const noexcept(noexcept(_array_view.size()))
 		{
-			return _size;
+			return _array_view.size();
 		}
 
 
@@ -266,11 +251,8 @@ namespace tc {
 
 		/* Member variables */
 
-		// Pointer to the first element of the viewed array data.
-		pointer _pointer;
-
-		// Number of elements to view.
-		size_type _size;
+		// Underlying view of the array
+		array_view<T> _array_view;
 
 	};
 
