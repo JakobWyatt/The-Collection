@@ -61,6 +61,12 @@ namespace tc {
 		(
 			vector_view const&
 		) = default;
+		
+		// Move constructor.
+		vector_view
+		(
+			vector_view&&
+		) = default;
 
 		// Constructor from pointer to array and size.
 		vector_view

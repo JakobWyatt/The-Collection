@@ -65,6 +65,12 @@ namespace tc {
 		(
 			array_view const&
 		) = default;
+		
+		// Move constructor.
+		array_view
+		(
+			array_view&&
+		) = default;
 
 		// Constructor from pointer to array and size.
 		array_view
