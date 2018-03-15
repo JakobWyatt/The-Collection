@@ -22,7 +22,7 @@ namespace tc {
 	*/
 
 	/* Non-owning view of a contiguous array for use as a mathematical vector.
-		Simply forwards the functionality of `array_view`, except that elements are 1-indexed.
+		Simply forwards the functionality of `array_view`, except that element access is via `operator()` instead of `operator[]` and is 1-indexed.
 	*/
 	template<
 		typename T
@@ -115,8 +115,8 @@ namespace tc {
 			vector_view&&
 		) = default;
 
-		// Subscript operator - unchecked element access.
-		reference operator[]
+		// Function call operator - unchecked element access.
+		reference operator()
 		(
 			size_type index
 		) const noexcept(noexcept(_array_view[index - 1]))
