@@ -103,19 +103,19 @@ namespace tc {
 		
 		/* Operators */
 
-		// Simple assignment operator - copy.
+		// Simple assignment - copy.
 		vector_view& operator=
 		(
 			vector_view const&
 		) = default;
 		
-		// Simple assignment operator - move.
+		// Simple assignment - move.
 		vector_view& operator=
 		(
 			vector_view&&
 		) = default;
 
-		// Function call operator - unchecked element access.
+		// Function call - unchecked element access.
 		reference operator()
 		(
 			size_type index

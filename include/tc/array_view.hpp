@@ -116,19 +116,19 @@ namespace tc {
 
 		/* Operators */
 		
-		// Simple assignment operator - copy.
+		// Simple assignment - copy.
 		array_view& operator=
 		(
 			array_view const&
 		) = default;
 		
-		// Simple assignment operator - move.
+		// Simple assignment - move.
 		array_view& operator=
 		(
 			array_view&&
 		) = default;
 
-		// Subscript operator - unchecked element access.
+		// Subscript - unchecked element access.
 		reference operator[]
 		(
 			size_type index
