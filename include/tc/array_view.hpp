@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <cstddef>			// std::size_t
 #include <iterator>			// std::data(), std::size(), std::reverse_iterator
 #include <memory>			// std::pointer_traits, std::addressof()
