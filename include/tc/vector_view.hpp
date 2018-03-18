@@ -1,7 +1,7 @@
 #pragma once
 
-#include "array_view.hpp"
-#include <stdexcept>		// std::out_of_range
+#include "array_view.hpp"		// tc::array_view
+#include <stdexcept>			// std::out_of_range
 
 
 namespace tc {
