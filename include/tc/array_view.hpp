@@ -54,7 +54,7 @@ namespace tc {
 
 		// Default constructor.
 		array_view
-		() noexcept :
+		() :
 			_pointer(nullptr),
 			_size(0)
 		{}
@@ -76,7 +76,7 @@ namespace tc {
 		(
 			pointer pointer,
 			size_type size
-		) noexcept :
+		) :
 			_pointer(pointer),
 			_size(size)
 		{}
@@ -89,7 +89,7 @@ namespace tc {
 		(
 			ContiguousIterator begin,
 			ContiguousIterator end
-		) noexcept(noexcept(end - begin) && noexcept(*begin) && noexcept(std::addressof(*begin))) :
+		) :
 			_size(end - begin)
 		{
 			if(_size == 0) {
@@ -107,7 +107,7 @@ namespace tc {
 		array_view
 		(
 			Container& container
-		) noexcept(noexcept(std::data(container)) && noexcept(std::size(container))) :
+		) :
 			_pointer(std::data(container)),
 			_size(std::size(container))
 		{}
@@ -131,7 +131,7 @@ namespace tc {
 		reference operator[]
 		(
 			size_type index
-		) const noexcept
+		) const
 		{
 			return _pointer[index];
 		}
@@ -153,35 +153,35 @@ namespace tc {
 
 		// Accesses the last element of the view.
 		reference back
-		() const noexcept
+		() const
 		{
 			return _pointer[_size - 1];
 		}
 
 		// Gets an iterator to the beginning of the view.
 		iterator begin
-		() const noexcept
+		() const
 		{
 			return _pointer;
 		}
 
 		// Gets a read-only iterator to the beginning of the view.
 		const_iterator cbegin
-		() const noexcept
+		() const
 		{
 			return _pointer;
 		}
 
 		// Gets a read-only iterator to the element following the last element of the view.
 		const_iterator cend
-		() const noexcept
+		() const
 		{
 			return _pointer + _size;
 		}
 
 		// Gets a read-only reverse iterator to the beginning of the reversed view.
 		const_reverse_iterator crbegin
-		() const noexcept(noexcept(const_reverse_iterator{ this->cend() }))
+		() const
 		{
 			// std::reverse_iterator constructor is explicit
 			return const_reverse_iterator{ this->cend() };
@@ -189,7 +189,7 @@ namespace tc {
 
 		// Gets a read-only reverse iterator to the end of the reversed view.
 		const_reverse_iterator crend
-		() const noexcept(noexcept(const_reverse_iterator{ this->cbegin() }))
+		() const
 		{
 			// std::reverse_iterator constructor is explicit
 			return const_reverse_iterator{ this->cbegin() };
@@ -197,35 +197,35 @@ namespace tc {
 
 		// Gets a pointer to the viewed array data
 		pointer data
-		() const noexcept
+		() const
 		{
 			return _pointer;
 		}
 
 		// Checks if the view's size is 0.
 		bool empty
-		() const noexcept
+		() const
 		{
 			return _size == 0;
 		}
 
 		// Gets an iterator to the element following the last element of the view.
 		iterator end
-		() const noexcept
+		() const
 		{
 			return _pointer + _size;
 		}
 
 		// Accesses the first element of the view.
 		reference front
-		() const noexcept
+		() const
 		{
 			return _pointer[0];
 		}
 
 		// Gets a reverse iterator to the beginning of the reversed view.
 		reverse_iterator rbegin
-		() const noexcept(noexcept(reverse_iterator{ this->end() }))
+		() const
 		{
 			// std::reverse_iterator constructor is explicit
 			return reverse_iterator{ this->end() };
@@ -233,7 +233,7 @@ namespace tc {
 
 		// Gets a reverse iterator to the end of the reversed view.
 		reverse_iterator rend
-		() const noexcept(noexcept(reverse_iterator{ this->begin() }))
+		() const
 		{
 			// std::reverse_iterator constructor is explicit
 			return reverse_iterator{ this->begin() };
@@ -244,7 +244,7 @@ namespace tc {
 		void shrink_back
 		(
 			size_type count
-		) noexcept
+		)
 		{
 			_size -= count;
 		}
@@ -253,7 +253,7 @@ namespace tc {
 		void shrink_front
 		(
 			size_type count
-		) noexcept
+		)
 		{
 			_pointer += count;
 			_size -= count;
@@ -261,7 +261,7 @@ namespace tc {
 
 		// Size getter.
 		size_type size
-		() const noexcept
+		() const
 		{
 			return _size;
 		}
