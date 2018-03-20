@@ -81,6 +81,25 @@ namespace tc {
 			vector(i) = value;
 		}
 	}
+	
+	// Transforms each vector element with a function.
+	template<
+		class InputVector,
+		class OutputVector,
+		typename Function,
+		typename SizeType = std::size_t
+	>
+	void v_fn
+	(
+		InputVector& in,
+		OutputVector& result,
+		Function function
+	)
+	{
+		for(SizeType i = 0; i < in.size(); ++i) {
+			result(i) = function(in(i));
+		}
+	}
 
 	// Vector L^2 (Euclidean) norm.
 	template<
