@@ -33,6 +33,7 @@ namespace tc {
 	
 		/* Member type aliases */
 	
+		using element_type = typename array_view<T>::element_type;
 		using value_type = typename array_view<T>::value_type;
 		using size_type = typename array_view<T>::size_type;
 		using reference = typename array_view<T>::reference;

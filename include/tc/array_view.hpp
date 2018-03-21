@@ -4,6 +4,7 @@
 #include <iterator>			// std::data(), std::size(), std::reverse_iterator
 #include <memory>			// std::pointer_traits, std::addressof()
 #include <stdexcept>		// std::out_of_range
+#include <type_traits>		// std::remove_cv_t
 
 
 namespace tc {
@@ -33,12 +34,13 @@ namespace tc {
 	
 		/* Member type aliases */
 	
-		using value_type = T;
+		using element_type = T;
+		using value_type = std::remove_cv_t<element_type>;
 		using size_type = std::size_t;
-		using reference = value_type&;
-		using const_reference = value_type const&;
-		using pointer = value_type*;
-		using const_pointer = value_type const*;
+		using reference = element_type&;
+		using const_reference = element_type const&;
+		using pointer = element_type*;
+		using const_pointer = element_type const*;
 		using difference_type = typename std::pointer_traits<pointer>::difference_type;
 		using iterator = pointer;
 		using const_iterator = const_pointer;
