@@ -5,10 +5,6 @@
 
 namespace tc {
 
-	/*
-		Function definitions
-	*/
-
 	// Matrix elementwise copy.
 	template<class InputMatrix, class OutputMatrix, typename SizeType = std::size_t>
 	void m_cpy(InputMatrix& in, OutputMatrix& out)

@@ -5,12 +5,6 @@
 
 namespace tc {
 
-	/*
-		Function definitions
-	*/
-	
-	/* Hybrid operations */
-
 	// Matrix-vector multiplication (matrix by column vector).
 	template<class InputMatrix, class InputVector, class OutputVector, typename SizeType = std::size_t>
 	void mv_mul(InputMatrix& lhs, InputVector& rhs, OutputVector& result)

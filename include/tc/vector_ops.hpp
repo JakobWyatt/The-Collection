@@ -6,10 +6,6 @@
 
 namespace tc {
 
-	/*
-		Function definitions
-	*/
-
 	// Scalar-vector elementwise multiplication.
 	template<typename Scalar, class InputVector, class OutputVector, typename SizeType = std::size_t>
 	void sv_mul(Scalar lhs, InputVector& rhs, OutputVector& result)

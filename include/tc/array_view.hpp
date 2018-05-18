@@ -327,12 +327,6 @@ namespace tc {
 		pointer _data;
 	};
 
-
-
-	/*
-		Helper alias templates
-	*/
-
 	// Dynamic dimension array_view.
 	template<typename T>
 	using array_view_dyn = array_view<T, 0>;
@@ -352,4 +346,5 @@ namespace tc {
 	// 4D array_view.
 	template<typename T>
 	using array_view4d = array_view<T, 4>;
+	
 }

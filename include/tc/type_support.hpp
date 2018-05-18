@@ -5,10 +5,6 @@
 
 
 namespace tc {
-	
-	/*
-		Class templates
-	*/
 
 	// Provides member type alias `type` which is equivalent to adding `N` levels of pointers to `T`.
 	template<typename T, std::uintmax_t N>
@@ -26,12 +22,6 @@ namespace tc {
 	// std::true_type if T1, T2, and all of Ts are the same type, otherwise std::false_type.
 	template<typename T1, typename T2, typename... Ts>
 	struct are_same : std::conjunction<std::is_same<T1, T2>, std::is_same<T2, Ts>...> {};
-	
-	
-	
-	/*
-		Helper alias templates
-	*/
 
 	// Equivalent to adding `N` levels of pointers to `T`.
 	template<typename T, std::uintmax_t N>

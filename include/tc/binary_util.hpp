@@ -9,19 +9,9 @@
 
 namespace tc {
 	
-	/*
-		Variable templates
-	*/
-	
 	// Size, in bits, of a type.
 	template<typename T>
 	constexpr inline std::size_t bits = sizeof(T) * CHAR_BIT;
-	
-	
-	
-	/*
-		Function templates
-	*/
 	
 	// Gets the value of the nth bit (bit 0 is LSB).
 	template<typename T>
