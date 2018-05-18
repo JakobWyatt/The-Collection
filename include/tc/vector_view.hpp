@@ -1,256 +1,112 @@
 #pragma once
 
-#include "array_view.hpp"		// tc::array_view
+#include <cstddef>				// std::size_t
+#include <iterator>				// std::data, std::size
+#include <memory>				// std::pointer_traits, std::addressof
 #include <stdexcept>			// std::out_of_range
+#include <type_traits>			// std::remove_cv_t
 
 
 namespace tc {
 
-	/*
-		Class forward declarations
-	*/
-
-	template<
-		typename T
-	>
-	class vector_view;
-
-
-
-	/*
-		Class definitions
-	*/
-
 	/* Non-owning view of a contiguous array for use as a mathematical vector.
-		Simply forwards the functionality of `array_view`, except that element access is via `operator()` instead of `operator[]` and is 1-indexed.
-	*/
-	template<
-		typename T
-	>
+		Element access is 1-indexed. */
+	template<typename T>
 	class vector_view {
-		
 	public:
 	
 		/* Member type aliases */
 	
-		using element_type = typename array_view<T>::element_type;
-		using value_type = typename array_view<T>::value_type;
-		using size_type = typename array_view<T>::size_type;
-		using reference = typename array_view<T>::reference;
-		using const_reference = typename array_view<T>::const_reference;
-		using pointer = typename array_view<T>::pointer;
-		using const_pointer = typename array_view<T>::const_pointer;
-		using difference_type = typename array_view<T>::difference_type;
-		using iterator = typename array_view<T>::iterator;
-		using const_iterator = typename array_view<T>::const_iterator;
-		using reverse_iterator = typename array_view<T>::reverse_iterator;
-		using const_reverse_iterator = typename array_view<T>::const_reverse_iterator;
+		using element_type = T;
+		using value_type = std::remove_cv_t<element_type>;
+		using size_type = std::size_t;
+		using reference = element_type&;
+		using const_reference = element_type const&;
+		using pointer = element_type*;
+		using const_pointer = element_type const*;
+		using difference_type = typename std::pointer_traits<pointer>::difference_type;
 
 		
 		/* Special members */
 		
 		// Destructor.
-		~vector_view
-		() = default;
+		~vector_view() = default;
 
 		// Default constructor.
-		vector_view
-		() = default;
+		vector_view() = default;
 		
 		// Copy constructor.
-		vector_view
-		(
-			vector_view const&
-		) = default;
+		vector_view(vector_view const&) = default;
 		
 		// Move constructor.
-		vector_view
-		(
-			vector_view&&
-		) = default;
+		vector_view(vector_view&&) = default;
 
 		// Constructor from pointer to array and size.
-		vector_view
-		(
-			pointer pointer,
-			size_type size
-		) :
-			_array_view(pointer, size)
+		vector_view(pointer pointer, size_type size) :
+			_data{pointer},
+			_size{size}
 		{}
 		
 		// Constructor from contiguous iterator range.
-		template<
-			typename ContiguousIterator
-		>
-		vector_view
-		(
-			ContiguousIterator begin,
-			ContiguousIterator end
-		) :
-			_array_view(begin, end)
-		{}
+		template<typename ContiguousIterator>
+		vector_view(ContiguousIterator begin, ContiguousIterator end) :
+			_size(end - begin)
+		{
+			/* Need to handle a range such as [container.end(), container.end()).
+				Valid, but taking the address of the end iterator will probably be UB. 
+				So instead use a nullptr. */
+			if(_size == 0) {
+				_data = nullptr;
+			}
+			else {
+				_data = std::addressof(*begin);
+			}
+		}
 
 		// Constructor from generic contiguous container.
-		template<
-			class Container
-		>
-		vector_view
-		(
-			Container& container
-		) :
-			array_view(container)
+		template<class Container>
+		vector_view(Container& container) :
+			_data{std::data(container)},
+			_size{std::size(container)}
 		{}
 
 		
 		/* Operators */
 
 		// Simple assignment - copy.
-		vector_view& operator=
-		(
-			vector_view const&
-		) = default;
+		vector_view& operator=(vector_view const&) = default;
 		
 		// Simple assignment - move.
-		vector_view& operator=
-		(
-			vector_view&&
-		) = default;
+		vector_view& operator=(vector_view&&) = default;
 
 		// Function call - unchecked element access.
-		reference operator()
-		(
-			size_type index
-		) const
+		reference operator()(size_type index) const
 		{
-			return _array_view[index - 1];
+			return _data[index - 1];
 		}
 
 		
 		/* General member functions */
 
 		// Bounds checked element access.
-		reference at
-		(
-			size_type index
-		) const
+		reference at(size_type index) const
 		{
-			if (index < 1) {
-				throw std::out_of_range("Specified index out of bounds.");
+			if (index < 1 || index >= _size) {
+				throw std::out_of_range{"Specified index out of bounds."};
 			}
-			else {
-				return _array_view.at(index - 1);
-			}
+			return operator()(index);
 		}
 
-		// Accesses the last element of the view.
-		reference back
-		() const
+		// Gets a pointer to the start of the viewed array.
+		pointer data() const
 		{
-			return _array_view.back();
-		}
-
-		// Gets an iterator to the beginning of the view.
-		iterator begin
-		() const
-		{
-			return _array_view.begin();
-		}
-
-		// Gets a read-only iterator to the beginning of the view.
-		const_iterator cbegin
-		() const
-		{
-			return _array_view.cbegin();
-		}
-
-		// Gets a read-only iterator to the element following the last element of the view.
-		const_iterator cend
-		() const
-		{
-			return _array_view.cend();
-		}
-
-		// Gets a read-only reverse iterator to the beginning of the reversed view.
-		const_reverse_iterator crbegin
-		() const
-		{
-			return _array_view.crbegin();
-		}
-
-		// Gets a read-only reverse iterator to the end of the reversed view.
-		const_reverse_iterator crend
-		() const
-		{
-			return _array_view.crend();
-		}
-
-		// Gets a pointer to the viewed array data
-		pointer data
-		() const
-		{
-			return _array_view.data();
-		}
-
-		// Checks if the view's size is 0.
-		bool empty
-		() const
-		{
-			return _array_view.empty();
-		}
-
-		// Gets an iterator to the element following the last element of the view.
-		iterator end
-		() const
-		{
-			return _array_view.end();
-		}
-
-		// Accesses the first element of the view.
-		reference front
-		() const
-		{
-			return _array_view.front();
-		}
-
-		// Gets a reverse iterator to the beginning of the reversed view.
-		reverse_iterator rbegin
-		() const
-		{
-			// std::reverse_iterator constructor is explicit
-			return _array_view.rbegin();
-		}
-
-		// Gets a reverse iterator to the end of the reversed view.
-		reverse_iterator rend
-		() const
-		{
-			return _array_view.rend();
-		}
-
-
-		// Shrinks the viewed data area from the back.
-		void shrink_back
-		(
-			size_type count
-		)
-		{
-			_array_view.shrink_back(count);
-		}
-
-		// Shrinks the viewed data area from the front.
-		void shrink_front
-		(
-			size_type count
-		)
-		{
-			_array_view.shrink_front(count);
+			return _data;
 		}
 
 		// Size getter.
-		size_type size
-		()
+		size_type size()
 		{
-			return _array_view.size();
+			return _size;
 		}
 
 
@@ -258,9 +114,11 @@ namespace tc {
 
 		/* Member variables */
 
-		// Underlying view of the array
-		array_view<T> _array_view;
-
+		// Pointer to viewed array data.
+		pointer _data;
+		
+		// Number of viewed elements.
+		size_type _size;
 	};
 
 }
