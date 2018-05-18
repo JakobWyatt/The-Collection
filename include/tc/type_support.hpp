@@ -24,8 +24,7 @@ namespace tc {
 	};
 	
 	// std::true_type if T1, T2, and all of Ts are the same type, otherwise std::false_type.
-	template<typename T1, typename T2, typename... Ts
-	>
+	template<typename T1, typename T2, typename... Ts>
 	struct are_same : std::conjunction<std::is_same<T1, T2>, std::is_same<T2, Ts>...> {};
 	
 	
