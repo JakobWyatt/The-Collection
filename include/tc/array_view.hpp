@@ -115,7 +115,9 @@ namespace tc {
 		~array_view() = default;
 
 		// Default constructor.
-		array_view() = default;
+		array_view() :
+			_dims{}
+		{}
 
 		// Copy constructor.
 		array_view(array_view const&) = default;
@@ -264,7 +266,9 @@ namespace tc {
 		~array_view() = default;
 
 		// Default constructor.
-		array_view() = default;
+		array_view() :
+			_data{nullptr}
+		{}
 
 		// Copy constructor.
 		array_view(array_view const&) = default;
