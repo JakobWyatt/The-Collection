@@ -27,14 +27,14 @@ namespace tc {
 		return __popcnt16(static_cast<std::uint16_t>(val));
 	}
 
-	// Popcount (number of bits set) (16-32 bit type).
+	// Popcount (number of bits set) (17-32 bit type).
 	template<typename T>
 	inline std::enable_if_t<(bits<T> > 16) && (bits<T> <= 32), std::size_t> popcount(T const& val)
 	{
 		return __popcnt(static_cast<std::uint32_t>(val));
 	}
 
-	// Popcount (number of bits set) (32-64 bit type).
+	// Popcount (number of bits set) (33-64 bit type).
 	template<typename T>
 	inline std::enable_if_t<(bits<T> > 32) && (bits<T> <= 64), std::size_t> popcount(T const& val)
 	{
