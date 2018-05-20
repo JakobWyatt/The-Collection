@@ -29,7 +29,7 @@ namespace tc {
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
 		#ifdef _DEBUG
-			for(SizeType i = 0; i < N; ++i) {
+			for (SizeType i = 0; i < N; ++i) {
 				assert(idx[i] < dims[i]);
 			}
 		#endif
@@ -37,7 +37,7 @@ namespace tc {
 		SizeType offset = idx[N - 1];
 		SizeType dim_size = 1;
 
-		for(std::size_t i = N - 1; i > 0; --i) {
+		for (std::size_t i = N - 1; i > 0; --i) {
 			dim_size *= dims[i];
 			offset += idx[i - 1] * dim_size;
 		}
@@ -193,7 +193,7 @@ namespace tc {
 			Bounds checked for debug builds. */
 		std::conditional_t<N == 1, reference, array_view<T, N - 1>> operator[](size_type index) const
 		{
-			if constexpr(N == 1) {
+			if constexpr (N == 1) {
 				return operator()(index);
 			}
 			else {
@@ -203,7 +203,7 @@ namespace tc {
 				
 				size_type dim0_size = 1;
 
-				for(size_type i = N - 1; i > 0; --i) {
+				for (size_type i = N - 1; i > 0; --i) {
 					dim0_size *= _dims[i];
 				}
 
@@ -244,12 +244,12 @@ namespace tc {
 			return _dims[d];
 		}
 
-		// Total number of elements in the array.
+		// Total number of viewed elements.
 		size_type size() const
 		{
 			size_type s = 1;
 
-			for(auto d : _dims) {
+			for (auto d : _dims) {
 				s *= d;
 			}
 

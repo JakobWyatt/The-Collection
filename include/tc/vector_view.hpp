@@ -58,7 +58,7 @@ namespace tc {
 			/* Need to handle a range such as [container.end(), container.end()).
 				Valid, but taking the address of the end iterator will probably be UB. 
 				So instead use a nullptr. */
-			if(_size == 0) {
+			if (_size == 0) {
 				_data = nullptr;
 			}
 			else {
