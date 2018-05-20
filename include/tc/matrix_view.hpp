@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef _DEBUG
+	#include <cassert>			// assert
+#endif
 #include <cstddef>				// std::size_t
 #include <memory>				// std::pointer_traits
 #include <stdexcept>			// std::out_of_range
@@ -61,27 +64,20 @@ namespace tc {
 		// Simple assignment - move.
 		matrix_view& operator=(matrix_view&&) = default;
 
-		// Function call - element access.
+		/* Function call - element access.
+			Bounds checked for debug builds. */
 		reference operator()(size_type row, size_type column) const
 		{
+			#ifdef _DEBUG
+				assert(row > 0 && row <= _rows);
+				assert(column > 0 && column <= _columns);
+			#endif
+			
 			return _data[((row - 1) * _columns) + (column - 1)];
 		}
 
 		
 		/* General member functions */
-
-		// Bounds checked element access.
-		reference at(size_type row, size_type column) const
-		{
-			if(row < 1 || row >= _rows) {
-				throw std::out_of_range{"Specified row out of bounds."};
-			}
-			if(column < 1 || column >= _columns) {
-				throw std::out_of_range{"Specified column out of bounds."};
-			}
-			
-			return operator()(row, column);
-		}
 
 		// Gets the number of rows viewed.
 		size_type columns() const

@@ -2,6 +2,9 @@
 
 #include <algorithm>		// std::copy_n
 #include <array>			// std::array
+#ifdef _DEBUG
+	#include <cassert>		// assert
+#endif
 #include <cstddef>			// std::size_t
 #include <memory>			// std::pointer_traits
 #include <stdexcept>		// std::out_of_range
@@ -19,12 +22,19 @@ namespace tc {
 	using indices = std::array<IndexType, N>;
 
 	/* Converts a set of N-dimensional set of dimensions and indices to a simple offset.
+		Bounds checked for debug builds.
 		Implementation for N > 4. */
 	template<std::size_t N, typename SizeType = std::size_t>
 	inline std::enable_if_t<(N > 4), SizeType> multidim_indices_offset
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
-		SizeType offset = idx.back();
+		#ifdef _DEBUG
+			for(SizeType i = 0; i < N; ++i) {
+				assert(idx[i] < dims[i]);
+			}
+		#endif
+		
+		SizeType offset = idx[N - 1];
 		SizeType dim_size = 1;
 
 		for(std::size_t i = N - 1; i > 0; --i) {
@@ -36,20 +46,31 @@ namespace tc {
 	}
 
 	/* Converts a set of N-dimensional set of dimensions and indices to a simple offset.
+		Bounds checked for debug builds.
 		Efficient implementation for N == 1. */
 	template<std::size_t N, typename SizeType = std::size_t>
 	inline std::enable_if_t<N == 1, SizeType> multidim_indices_offset
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
+		#ifdef _DEBUG
+			assert(idx[0] < dims[0]);
+		#endif
+		
 		return idx[0];
 	}
 
 	/* Converts a set of N-dimensional set of dimensions and indices to a simple offset.
+		Bounds checked for debug builds.
 		Efficient implementation for N == 2. */
 	template<std::size_t N, typename SizeType = std::size_t>
 	inline std::enable_if_t<N == 2, SizeType> multidim_indices_offset
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
+		#ifdef _DEBUG
+			assert(idx[0] < dims[0]);
+			assert(idx[1] < dims[1]);
+		#endif
+		
 		SizeType offset = idx[1];
 		offset += idx[0] * dims[1];
 
@@ -57,11 +78,18 @@ namespace tc {
 	}
 
 	/* Converts a set of N-dimensional set of dimensions and indices to a simple offset.
+		Bounds checked for debug builds.
 		Efficient implementation for N == 3. */
 	template<std::size_t N, typename SizeType = std::size_t>
 	inline std::enable_if_t<N == 3, SizeType> multidim_indices_offset
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
+		#ifdef _DEBUG
+			assert(idx[0] < dims[0]);
+			assert(idx[1] < dims[1]);
+			assert(idx[2] < dims[2]);
+		#endif
+		
 		SizeType const dim2_size = dims[2];
 		SizeType const dim1_size = dim2_size * dims[1];
 
@@ -73,11 +101,19 @@ namespace tc {
 	}
 
 	/* Converts a set of N-dimensional set of dimensions and indices to a simple offset.
+		Bounds checked for debug builds.
 		Efficient implementation for N == 4. */
 	template<std::size_t N, typename SizeType = std::size_t>
 	inline std::enable_if_t<N == 4, SizeType> multidim_indices_offset
 		(dimensions<N, SizeType> const& dims, indices<N, SizeType> const& idx)
 	{
+		#ifdef _DEBUG
+			assert(idx[0] < dims[0]);
+			assert(idx[1] < dims[1]);
+			assert(idx[2] < dims[2]);
+			assert(idx[3] < dims[3]);
+		#endif
+		
 		SizeType const dim3_size = dims[3];
 		SizeType const dim2_size = dim3_size * dims[2];
 		SizeType const dim1_size = dim2_size * dims[1];
@@ -151,13 +187,20 @@ namespace tc {
 		// Simple assignment - move.
 		array_view& operator=(array_view&&) = default;
 
-		// Subscript - dimension access.
+		/* Subscript - dimension access.
+			Same as operator() for N == 1.
+			Otherwise, returns the specified dimension as a new array_view. 
+			Bounds checked for debug builds. */
 		std::conditional_t<N == 1, reference, array_view<T, N - 1>> operator[](size_type index) const
 		{
 			if constexpr(N == 1) {
 				return operator()(index);
 			}
 			else {
+				#ifdef _DEBUG
+					assert(index < _dims[0]);
+				#endif
+				
 				size_type dim0_size = 1;
 
 				for(size_type i = N - 1; i > 0; --i) {
@@ -173,7 +216,8 @@ namespace tc {
 			}
 		}
 
-		// Function call - element access.
+		/* Function call - element access.
+			Uses array_view<T, 0>::operator().*/
 		template<typename... Indices>
 		inline reference operator()(Indices... idx) const
 		{
@@ -183,40 +227,21 @@ namespace tc {
 
 		/* General member functions */
 
-		// Bounds checked element access.
-		template<typename... Indices>
-		std::enable_if_t<sizeof...(Indices) == N, reference> at(Indices... idx) const
-		{
-			std::array<size_type, N> const indices_arr{static_cast<size_type>(idx)...};
-
-			for(size_type i = 0; i < N; ++i) {
-				if(indices_arr[i] >= _dims[i]) {
-					throw std::out_of_range{"Index out of bounds."};
-				}
-			}
-
-			return operator()(idx...);
-		}
-
 		// Pointer to array.
 		pointer data() const
 		{
 			return _view.data();
 		}
 
-		// Size of the specified dimension (zero-indexed).
+		/* Size of the specified dimension (zero-indexed).
+			Bounds checked for debug builds. */
 		size_type dim_size(size_type d) const
 		{
+			#ifdef _DEBUG
+				assert(d < N);
+			#endif
+			
 			return _dims[d];
-		}
-
-		// Size of the specified dimension (zero-indexed) (bounds checked).
-		size_type dim_size_c(size_type d) const {
-			if(d >= N) {
-				throw std::out_of_range{"Specified dimension must be less than N."};
-			}
-
-			return dim_size(d);
 		}
 
 		// Total number of elements in the array.
@@ -289,7 +314,8 @@ namespace tc {
 		// Simple assignment - move.
 		array_view& operator=(array_view&&) = default;
 
-		// Function call - element access.
+		/* Function call - element access.
+			Uses multidim_indices_offset. */
 		template<typename... Indices>
 		inline reference operator()(dimensions<sizeof...(Indices), size_type> const& dims, Indices... idx) const
 		{
@@ -300,21 +326,6 @@ namespace tc {
 		
 
 		/* General member functions */
-
-		// Bounds checked element access.
-		template<typename... Indices>
-		reference at(dimensions<sizeof...(Indices), size_type> const& dims, Indices... idx) const
-		{
-			std::array<size_type, sizeof...(Indices)> const indices_arr{static_cast<size_type>(idx)...};
-
-			for(size_type i = 0; i < sizeof...(Indices); ++i) {
-				if(indices_arr[i] >= dims[i]) {
-					throw std::out_of_range{"Index out of bounds."};
-				}
-			}
-
-			return operator()(dims, idx...);
-		}
 
 		// Pointer to array.
 		pointer data() const

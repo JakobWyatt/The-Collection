@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef _DEBUG
+	#include <cassert>			// assert
+#endif
 #include <cstddef>				// std::size_t
 #include <iterator>				// std::data, std::size
 #include <memory>				// std::pointer_traits, std::addressof
@@ -79,23 +82,19 @@ namespace tc {
 		// Simple assignment - move.
 		vector_view& operator=(vector_view&&) = default;
 
-		// Function call - unchecked element access.
+		/* Function call - element access.
+			Bounds checked for debug builds. */
 		reference operator()(size_type index) const
 		{
+			#ifdef _DEBUG
+				assert(index > 0 && index <= _size);
+			#endif
+			
 			return _data[index - 1];
 		}
 
 		
 		/* General member functions */
-
-		// Bounds checked element access.
-		reference at(size_type index) const
-		{
-			if (index < 1 || index >= _size) {
-				throw std::out_of_range{"Specified index out of bounds."};
-			}
-			return operator()(index);
-		}
 
 		// Gets a pointer to the start of the viewed array.
 		pointer data() const
