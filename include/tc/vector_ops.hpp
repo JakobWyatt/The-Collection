@@ -8,7 +8,7 @@ namespace tc {
 	namespace vector_ops {
 
 		// Scalar-vector elementwise multiplication.
-		template<typename Element, class InputVector, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, typename Element, class InputVector, class OutputVector>
 		void sv_mul(Element const& lhs, InputVector& rhs, OutputVector& result)
 		{
 			for (SizeType i = 1; i <= rhs.size(); ++i) {
@@ -17,7 +17,7 @@ namespace tc {
 		}
 
 		// Vector elementwise copy.
-		template<class InputVector, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, class OutputVector,>
 		void v_cpy(InputVector& in, OutputVector& out)
 		{
 			for (SizeType i = 1; i <= in.size(); ++i) {
@@ -26,7 +26,7 @@ namespace tc {
 		}
 
 		// Vector element sum.
-		template<class InputVector, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, typename Element>
 		void v_esum(InputVector& in, Element& result)
 		{
 			result = Element{};
@@ -37,7 +37,7 @@ namespace tc {
 		}
 
 		// Sets all vector elements to a value.
-		template<class OutputVector, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class OutputVector, typename Element>
 		void v_fill(OutputVector& vector, Element const& value)
 		{
 			for (SizeType i = 1; i <= vector.size(); ++i) {
@@ -46,7 +46,7 @@ namespace tc {
 		}
 		
 		// Transforms each vector element with a function.
-		template<class InputVector, class OutputVector, typename Function, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, class OutputVector, typename Function>
 		void v_fn(InputVector& in, OutputVector& result, Function function)
 		{
 			for (SizeType i = 1; i <= in.size(); ++i) {
@@ -55,7 +55,7 @@ namespace tc {
 		}
 
 		// Vector L^2 (Euclidean) norm.
-		template<class InputVector, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, typename Element>
 		void v_l2norm(InputVector& in, Element& result)
 		{
 			result = Element{};
@@ -69,7 +69,7 @@ namespace tc {
 		}
 
 		// Vector p-norm.
-		template<class InputVector, typename Value, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, typename Value, typename Element>
 		void v_pnorm(InputVector& in, Value const& p, Element& result)
 		{
 			result = Element{};
@@ -82,7 +82,7 @@ namespace tc {
 		}
 
 		// Vector-scalar elementwise multiplication.
-		template<class InputVector, typename Element, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, typename Element, class OutputVector>
 		void vs_mul(InputVector& lhs, Element const& rhs, OutputVector& result)
 		{
 			for (SizeType i = 1; i <= lhs.size(); ++i) {
@@ -91,7 +91,7 @@ namespace tc {
 		}
 
 		// Vector-vector elementwise addition.
-		template<class InputVector1, class InputVector2, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
 		void vv_add(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
 		{
 			for (SizeType i = 1; i <= lhs.size(); ++i) {
@@ -109,7 +109,7 @@ namespace tc {
 		}
 
 		// Vector-vector dot (inner) product.
-		template<class InputVector1, class InputVector2, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, typename Element>
 		void vv_dprod(InputVector1& lhs, InputVector2& rhs, Element& result)
 		{
 			result = Element{};
@@ -120,7 +120,7 @@ namespace tc {
 		}
 
 		// Vector-vector Hadamard (elementwise) product.
-		template<class InputVector1, class InputVector2, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
 		void vv_hprod(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
 		{
 			for (SizeType i = 1; i <= lhs.size(); ++i) {
@@ -129,7 +129,7 @@ namespace tc {
 		}
 
 		// Vector-vector matrix product (column vector by row vector).
-		template<class InputVector, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector, class OutputMatrix>
 		void vv_mprod(InputVector& lhs, InputVector& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.size(); ++i) {
@@ -140,7 +140,7 @@ namespace tc {
 		}
 
 		// Vector-vector elementwise subtraction.
-		template<class InputVector1, class InputVector2, class OutputVector, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
 		void vv_sub(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
 		{
 			for (SizeType i = 1; i <= lhs.size(); ++i) {

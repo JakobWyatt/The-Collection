@@ -7,7 +7,7 @@ namespace tc {
 	namespace matrix_ops {
 
 		// Matrix elementwise copy.
-		template<class InputMatrix, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
 		void m_cpy(InputMatrix& in, OutputMatrix& out)
 		{
 			for (SizeType i = 1; i <= in.rows(); ++i) {
@@ -18,7 +18,7 @@ namespace tc {
 		}
 
 		// Sets all matrix elements to a value.
-		template<class OutputMatrix, typename Element, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class OutputMatrix, typename Element>
 		void m_fill(OutputMatrix& matrix, Element const& val)
 		{
 			for (SizeType i = 1; i <= matrix.rows(); ++i) {
@@ -29,7 +29,7 @@ namespace tc {
 		}
 
 		// Transforms each matrix element with a function.
-		template<class InputMatrix, class OutputMatrix, typename Function, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix, typename Function>
 		void m_fn(InputMatrix& in, OutputMatrix& result, Function function)
 		{
 			for (SizeType i = 1; i <= in.rows(); ++i) {
@@ -41,7 +41,7 @@ namespace tc {
 
 		/* Matrix transposition.
 			Does not work for in place transposition. */
-		template<class InputMatrix, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
 		void m_trn(InputMatrix& in, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= in.rows(); ++i) {
@@ -52,7 +52,7 @@ namespace tc {
 		}
 
 		// Matrix-matrix elementwise addition.
-		template<class InputMatrix1, class InputMatrix2, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_add(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
@@ -63,7 +63,7 @@ namespace tc {
 		}
 
 		// Matrix-matrix Hadamard (elementwise) product.
-		template<class InputMatrix1, class InputMatrix2, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_hprod(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
@@ -74,7 +74,7 @@ namespace tc {
 		}
 
 		// Matrix-matrix multiplication.
-		template<class InputMatrix1, class InputMatrix2, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_mul(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
@@ -88,7 +88,7 @@ namespace tc {
 		}
 
 		// Matrix-matrix elementwise subtraction.
-		template<class InputMatrix1, class InputMatrix2, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_sub(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
@@ -99,7 +99,7 @@ namespace tc {
 		}
 
 		// Matrix-scalar elementwise multiplication.
-		template<class InputMatrix, typename Element, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, class InputMatrix, typename Element, class OutputMatrix>
 		void ms_mul(InputMatrix& lhs, Element const& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
@@ -110,7 +110,7 @@ namespace tc {
 		}
 
 		// Scalar-matrix elementwise multiplication.
-		template<typename Element, class InputMatrix, class OutputMatrix, typename SizeType = std::size_t>
+		template<typename SizeType = std::size_t, typename Element, class InputMatrix, class OutputMatrix>
 		void sm_mul(Element lhs, InputMatrix& rhs, OutputMatrix& result)
 		{
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
