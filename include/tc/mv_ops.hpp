@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef _DEBUG
+	#include <cassert>		// assert
+#endif
 #include <cstddef>			// std::size_t
 
 
@@ -10,6 +13,11 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix, class InputVector, class OutputVector>
 		void mv_mul(InputMatrix& lhs, InputVector& rhs, OutputVector& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.columns() == rhs.size());
+				assert(lhs.rows() == result.size());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				result(i) = OutputVector::value_type{};
 
@@ -23,6 +31,11 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputVector, class InputMatrix, class OutputVector>
 		void vm_mul(InputVector& lhs, InputMatrix& rhs, OutputVector& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.size() == rhs.rows());
+				assert(rhs.columns() == result.size());
+			#endif
+			
 			for (SizeType j = 1; j <= rhs.columns(); ++j) {
 				result(j) = OutputVector::value_type{};
 
