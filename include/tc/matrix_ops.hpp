@@ -1,5 +1,8 @@
 #pragma once
 
+#ifdef _DEBUG
+	#include <cassert>		// assert
+#endif
 #include <cstddef>			// std::size_t
 
 
@@ -10,6 +13,11 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
 		void m_cpy(InputMatrix& in, OutputMatrix& out)
 		{
+			#ifdef _DEBUG
+				assert(in.rows() == out.rows());
+				assert(in.columns() == out.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= in.rows(); ++i) {
 				for (SizeType j = 1; j <= in.columns(); ++j) {
 					out(i, j) = in(i, j);
@@ -32,6 +40,11 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix, typename Function>
 		void m_fn(InputMatrix& in, OutputMatrix& result, Function function)
 		{
+			#ifdef _DEBUG
+				assert(in.rows() == result.rows());
+				assert(in.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= in.rows(); ++i) {
 				for (SizeType j = 1; j <= in.columns(); ++j) {
 					result(i, j) = function(in(i, j));
@@ -40,10 +53,15 @@ namespace tc {
 		}
 
 		/* Matrix transposition.
-			Does not work for in place transposition. */
+			`in` must not refer to the same data as `result`, ie in-place transposition is not supported. */
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
 		void m_trn(InputMatrix& in, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(in.rows() == result.rows());
+				assert(in.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= in.rows(); ++i) {
 				for (SizeType j = 1; j <= in.columns(); ++j) {
 					result(j, i) = in(i, j);
@@ -55,6 +73,13 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_add(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == rhs.rows());
+				assert(lhs.columns() == rhs.columns());
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= lhs.columns(); ++j) {
 					result(i, j) = lhs(i, j) + rhs(i, j);
@@ -66,6 +91,13 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_hprod(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == rhs.rows());
+				assert(lhs.columns() == rhs.columns());
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= lhs.columns(); ++j) {
 					result(i, j) = lhs(i, j) * rhs(i, j);
@@ -77,6 +109,12 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_mul(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.columns() == rhs.rows());
+				assert(lhs.rows() == result.rows());
+				assert(rhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= rhs.columns(); ++j) {
 					result(i, j) = OutputMatrix::value_type{};
@@ -91,6 +129,13 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
 		void mm_sub(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == rhs.rows());
+				assert(lhs.columns() == rhs.columns());
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= lhs.columns(); ++j) {
 					result(i, j) = lhs(i, j) - rhs(i, j);
@@ -102,6 +147,11 @@ namespace tc {
 		template<typename SizeType = std::size_t, class InputMatrix, typename Element, class OutputMatrix>
 		void ms_mul(InputMatrix& lhs, Element const& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= lhs.columns(); ++j) {
 					result(i, j) = lhs(i, j) * rhs;
@@ -111,8 +161,13 @@ namespace tc {
 
 		// Scalar-matrix elementwise multiplication.
 		template<typename SizeType = std::size_t, typename Element, class InputMatrix, class OutputMatrix>
-		void sm_mul(Element lhs, InputMatrix& rhs, OutputMatrix& result)
+		void sm_mul(Element const& lhs, InputMatrix& rhs, OutputMatrix& result)
 		{
+			#ifdef _DEBUG
+				assert(rhs.rows() == result.rows());
+				assert(rhs.columns() == result.columns());
+			#endif
+			
 			for (SizeType i = 1; i <= lhs.rows(); ++i) {
 				for (SizeType j = 1; j <= lhs.columns(); ++j) {
 					result(i, j) = lhs * rhs(i, j);
