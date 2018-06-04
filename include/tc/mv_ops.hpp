@@ -26,6 +26,24 @@ namespace tc {
 				}
 			}
 		}
+		
+		// Matrix-vector multiplication (matrix by column vector) (matrix transposed).
+		template<typename SizeType = std::size_t, class InputMatrix, class InputVector, class OutputVector>
+		void mv_tmul(InputMatrix& lhs, InputVector& rhs, OutputVector& result)
+		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == rhs.size());
+				assert(lhs.columns() == result.size());
+			#endif
+			
+			for (SizeType j = 1; j <= lhs.columns(); ++j) {
+				result(j) = OutputVector::value_type{};
+				
+				for (SizeType i = 1; i <= lhs.rows(); ++i) {
+					result(j) += lhs(i, j) * rhs(i);
+				}
+			}
+		}
 
 		// Vector-matrix multiplication (row vector by matrix).
 		template<typename SizeType = std::size_t, class InputVector, class InputMatrix, class OutputVector>
