@@ -2,7 +2,7 @@
 
 #include <chrono>			// std::system_clock
 #include <limits>			// std::numeric_limits
-#include <random>			// std::mt19937_64, std::random_device, std::uniform_int_distribution, std::uniform_real_distribution
+#include <random>			// std::mt19937_64, std::random_device, std::uniform_int_distribution, std::uniform_real_distribution, std::normal_distribution
 #include <type_traits>		// std::enable_if_t, std::is_floating_point_v, std::is_integral_v, std::conditional_t, std::is_signed_v, std::is_same_v
 
 
@@ -50,6 +50,17 @@ namespace tc {
 			std::uniform_int_distribution<type> dist{};
 			
 			return dist(generic_rand_eng) > (std::numeric_limits<type>::max() / 2U);
+		}
+		
+		/* Generates a standard normally distributed (u = 0, s = 1) random floating point value.
+			The random value is generated with generic_rand_eng and std::normal_distribution. */
+		template<typename T>
+		std::enable_if_t<std::is_floating_point_v<T>, T> random_standard_normal()
+		{
+			// Defaults to a standard normal distribution.
+			std::normal_distribution<T> dist{};
+			
+			return dist(generic_rand_eng);
 		}
 		
 	}
