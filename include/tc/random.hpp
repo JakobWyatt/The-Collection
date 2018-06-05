@@ -10,20 +10,20 @@ namespace tc {
 	namespace random {
 		
 		// Generic pseudorandom engine, seeded (hopefully) randomly.
-		static std::mt19937_64 generic_rand_eng(std::random_device{}() + std::chrono::system_clock::now().time_since_epoch().count());
+		static std::mt19937_64 generic_rand(std::random_device{}() + std::chrono::system_clock::now().time_since_epoch().count());
 		
 		/* Generates a uniformly distributed random floating point value.
-			The random value is generated with generic_rand_eng and std::uniform_real_distribution. */
+			The random value is generated with generic_rand and std::uniform_real_distribution. */
 		template<typename T>
 		std::enable_if_t<std::is_floating_point_v<T>, T> random_uniform()
 		{
 			std::uniform_real_distribution<T> dist{std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max()};
 			
-			return dist(generic_rand_eng);
+			return dist(generic_rand);
 		}
 		
 		/* Generates a uniformly distributed random integral value.
-			The random value is generated with generic_rand_eng and std::uniform_real_distribution. */
+			The random value is generated with generic_rand and std::uniform_real_distribution. */
 		template<typename T>
 		std::enable_if_t<std::is_integral_v<T>, T> random_uniform()
 		{
@@ -36,11 +36,11 @@ namespace tc {
 			std::uniform_int_distribution<largest_type> dist{std::numeric_limits<T>::min(), std::numeric_limits<T>::max()};
 			
 			// Narrowing cast is OK, value will always be representable and thus well-defined.
-			return static_cast<T>(dist(generic_rand_eng));
+			return static_cast<T>(dist(generic_rand));
 		}
 		
-		/* Generates a uniformly distributed boolean value.
-			The random value is generated with generic_rand_eng. */
+		/* Generates a uniformly distributed random boolean value.
+			The random value is generated with generic_rand. */
 		template<typename T>
 		std::enable_if_t<std::is_same_v<T, bool>, bool> random_uniform()
 		{
@@ -49,18 +49,18 @@ namespace tc {
 			
 			std::uniform_int_distribution<type> dist{};
 			
-			return dist(generic_rand_eng) > (std::numeric_limits<type>::max() / 2U);
+			return dist(generic_rand) > (std::numeric_limits<type>::max() / 2U);
 		}
 		
 		/* Generates a standard normally distributed (u = 0, s = 1) random floating point value.
-			The random value is generated with generic_rand_eng and std::normal_distribution. */
+			The random value is generated with generic_rand and std::normal_distribution. */
 		template<typename T>
 		std::enable_if_t<std::is_floating_point_v<T>, T> random_standard_normal()
 		{
 			// Defaults to a standard normal distribution.
 			std::normal_distribution<T> dist{};
 			
-			return dist(generic_rand_eng);
+			return dist(generic_rand);
 		}
 		
 	}
