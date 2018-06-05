@@ -104,7 +104,7 @@ namespace tc {
 			}
 
 			// Size getter.
-			size_type size()
+			size_type size() const
 			{
 				return _size;
 			}
