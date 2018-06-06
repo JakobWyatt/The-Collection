@@ -84,5 +84,29 @@ namespace tc {
 			std::transform(std::execution::par_unseq, lhs.data(), lhs.data() + lhs.size(), rhs.data(), result.data(), std::multiplies());
 		}
 
+		// Matrix-scalar elementwise multiplication.
+		template<typename SizeType = std::size_t, class InputMatrix, typename Element, class OutputMatrix>
+		void ms_mul(InputMatrix const& lhs, Element const& rhs, OutputMatrix& result)
+		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
+			std::transform(std::execution::par_unseq, lhs.data(), lhs.data() + lhs.size(), result.data(), [=](InputMatrix::value_type x){ return rhs * x; });
+		}
+
+		// Scalar-matrix elementwise multiplication.
+		template<typename SizeType = std::size_t, typename Element, class InputMatrix, class OutputMatrix>
+		void sm_mul(Element const& lhs, InputMatrix const& rhs, OutputMatrix& result)
+		{
+			#ifdef _DEBUG
+				assert(rhs.rows() == result.rows());
+				assert(rhs.columns() == result.columns());
+			#endif
+			
+			std::transform(std::execution::par_unseq, rhs.data(), rhs.data() + rhs.size(), result.data(), [=](InputMatrix::value_type x){ return lhs * x; });
+		}
+
 	}
 }
