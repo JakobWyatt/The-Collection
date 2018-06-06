@@ -11,7 +11,7 @@ namespace tc {
 
 		// Matrix elementwise copy.
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
-		void m_cpy(InputMatrix& in, OutputMatrix& out)
+		void m_cpy(InputMatrix const& in, OutputMatrix& out)
 		{
 			#ifdef _DEBUG
 				assert(in.rows() == out.rows());
@@ -38,7 +38,7 @@ namespace tc {
 
 		// Transforms each matrix element with a function.
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix, typename Function>
-		void m_fn(InputMatrix& in, OutputMatrix& result, Function function)
+		void m_fn(InputMatrix const& in, OutputMatrix& result, Function function)
 		{
 			#ifdef _DEBUG
 				assert(in.rows() == result.rows());
@@ -55,7 +55,7 @@ namespace tc {
 		/* Matrix transposition.
 			`in` must not refer to the same data as `result`, ie in-place transposition is not supported. */
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix>
-		void m_trn(InputMatrix& in, OutputMatrix& result)
+		void m_trn(InputMatrix const& in, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(in.rows() == result.rows());
@@ -71,7 +71,7 @@ namespace tc {
 
 		// Matrix-matrix elementwise addition.
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
-		void mm_add(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
+		void mm_add(InputMatrix1 const& lhs, InputMatrix2 const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.rows() == rhs.rows());
@@ -89,7 +89,7 @@ namespace tc {
 
 		// Matrix-matrix Hadamard (elementwise) product.
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
-		void mm_hprod(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
+		void mm_hprod(InputMatrix1 const& lhs, InputMatrix2 const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.rows() == rhs.rows());
@@ -107,7 +107,7 @@ namespace tc {
 
 		// Matrix-matrix multiplication.
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
-		void mm_mul(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
+		void mm_mul(InputMatrix1 const& lhs, InputMatrix2 const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.columns() == rhs.rows());
@@ -127,7 +127,7 @@ namespace tc {
 
 		// Matrix-matrix elementwise subtraction.
 		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
-		void mm_sub(InputMatrix1& lhs, InputMatrix2& rhs, OutputMatrix& result)
+		void mm_sub(InputMatrix1 const& lhs, InputMatrix2 const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.rows() == rhs.rows());
@@ -145,7 +145,7 @@ namespace tc {
 
 		// Matrix-scalar elementwise multiplication.
 		template<typename SizeType = std::size_t, class InputMatrix, typename Element, class OutputMatrix>
-		void ms_mul(InputMatrix& lhs, Element const& rhs, OutputMatrix& result)
+		void ms_mul(InputMatrix const& lhs, Element const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.rows() == result.rows());
@@ -161,7 +161,7 @@ namespace tc {
 
 		// Scalar-matrix elementwise multiplication.
 		template<typename SizeType = std::size_t, typename Element, class InputMatrix, class OutputMatrix>
-		void sm_mul(Element const& lhs, InputMatrix& rhs, OutputMatrix& result)
+		void sm_mul(Element const& lhs, InputMatrix const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(rhs.rows() == result.rows());

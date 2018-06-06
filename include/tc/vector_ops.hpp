@@ -25,7 +25,7 @@ namespace tc {
 
 		// Vector elementwise copy.
 		template<typename SizeType = std::size_t, class InputVector, class OutputVector>
-		void v_cpy(InputVector& in, OutputVector& out)
+		void v_cpy(InputVector const& in, OutputVector& out)
 		{
 			#ifdef _DEBUG
 				assert(in.size() == out.size());
@@ -38,7 +38,7 @@ namespace tc {
 
 		// Vector element sum.
 		template<typename SizeType = std::size_t, class InputVector, typename Element>
-		void v_esum(InputVector& in, Element& result)
+		void v_esum(InputVector const& in, Element& result)
 		{
 			result = Element{};
 
@@ -58,7 +58,7 @@ namespace tc {
 		
 		// Transforms each vector element with a function.
 		template<typename SizeType = std::size_t, class InputVector, typename Function, class OutputVector>
-		void v_fn(InputVector& in, Function function, OutputVector& result)
+		void v_fn(InputVector const& in, Function function, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(in.size() == result.size());
@@ -71,7 +71,7 @@ namespace tc {
 
 		// Vector L^2 (Euclidean) norm.
 		template<typename SizeType = std::size_t, class InputVector, typename Element>
-		void v_l2norm(InputVector& in, Element& result)
+		void v_l2norm(InputVector const& in, Element& result)
 		{
 			result = Element{};
 
@@ -85,7 +85,7 @@ namespace tc {
 
 		// Vector p-norm.
 		template<typename SizeType = std::size_t, class InputVector, typename Value, typename Element>
-		void v_pnorm(InputVector& in, Value const& p, Element& result)
+		void v_pnorm(InputVector const& in, Value const& p, Element& result)
 		{
 			result = Element{};
 
@@ -98,7 +98,7 @@ namespace tc {
 
 		// Vector-scalar elementwise multiplication.
 		template<typename SizeType = std::size_t, class InputVector, typename Element, class OutputVector>
-		void vs_mul(InputVector& lhs, Element const& rhs, OutputVector& result)
+		void vs_mul(InputVector const& lhs, Element const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == result.size());
@@ -111,7 +111,7 @@ namespace tc {
 
 		// Vector-vector elementwise addition.
 		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
-		void vv_add(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
+		void vv_add(InputVector1 const& lhs, InputVector2 const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == rhs.size());
@@ -125,7 +125,7 @@ namespace tc {
 
 		// Vector-vector cross product (3-vectors only).
 		template<class InputVector1, class InputVector2, class OutputVector>
-		void vv_cprod(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
+		void vv_cprod(InputVector1 const& lhs, InputVector2 const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == 3);
@@ -140,7 +140,7 @@ namespace tc {
 
 		// Vector-vector dot (inner) product.
 		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, typename Element>
-		void vv_dprod(InputVector1& lhs, InputVector2& rhs, Element& result)
+		void vv_dprod(InputVector1 const& lhs, InputVector2 const& rhs, Element& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == rhs.size());
@@ -155,7 +155,7 @@ namespace tc {
 
 		// Vector-vector Hadamard (elementwise) product.
 		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
-		void vv_hprod(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
+		void vv_hprod(InputVector1 const& lhs, InputVector2 const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == rhs.size());
@@ -169,7 +169,7 @@ namespace tc {
 
 		// Vector-vector matrix product (column vector by row vector).
 		template<typename SizeType = std::size_t, class InputVector, class OutputMatrix>
-		void vv_mprod(InputVector& lhs, InputVector& rhs, OutputMatrix& result)
+		void vv_mprod(InputVector const& lhs, InputVector const& rhs, OutputMatrix& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == result.rows());
@@ -185,7 +185,7 @@ namespace tc {
 
 		// Vector-vector elementwise subtraction.
 		template<typename SizeType = std::size_t, class InputVector1, class InputVector2, class OutputVector>
-		void vv_sub(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
+		void vv_sub(InputVector1 const& lhs, InputVector2 const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == rhs.size());

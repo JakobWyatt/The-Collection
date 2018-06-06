@@ -11,7 +11,7 @@ namespace tc {
 
 		// Matrix-vector multiplication (matrix by column vector).
 		template<typename SizeType = std::size_t, class InputMatrix, class InputVector, class OutputVector>
-		void mv_mul(InputMatrix& lhs, InputVector& rhs, OutputVector& result)
+		void mv_mul(InputMatrix const& lhs, InputVector const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.columns() == rhs.size());
@@ -29,7 +29,7 @@ namespace tc {
 		
 		// Matrix-vector multiplication (matrix by column vector) (matrix transposed).
 		template<typename SizeType = std::size_t, class InputMatrix, class InputVector, class OutputVector>
-		void mv_tmul(InputMatrix& lhs, InputVector& rhs, OutputVector& result)
+		void mv_tmul(InputMatrix const& lhs, InputVector const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.rows() == rhs.size());
@@ -47,7 +47,7 @@ namespace tc {
 
 		// Vector-matrix multiplication (row vector by matrix).
 		template<typename SizeType = std::size_t, class InputVector, class InputMatrix, class OutputVector>
-		void vm_mul(InputVector& lhs, InputMatrix& rhs, OutputVector& result)
+		void vm_mul(InputVector const& lhs, InputMatrix const& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == rhs.rows());
