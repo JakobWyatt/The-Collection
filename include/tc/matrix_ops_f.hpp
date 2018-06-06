@@ -56,5 +56,19 @@ namespace tc {
 			std::transform(std::execution::par_unseq, lhs.data(), lhs.data() + lhs.size(), rhs.data(), result.data(), std::plus());
 		}
 
+		// Matrix-matrix Hadamard (elementwise) product.
+		template<typename SizeType = std::size_t, class InputMatrix1, class InputMatrix2, class OutputMatrix>
+		void mm_hprod(InputMatrix1 const& lhs, InputMatrix2 const& rhs, OutputMatrix& result)
+		{
+			#ifdef _DEBUG
+				assert(lhs.rows() == rhs.rows());
+				assert(lhs.columns() == rhs.columns());
+				assert(lhs.rows() == result.rows());
+				assert(lhs.columns() == result.columns());
+			#endif
+			
+			std::transform(std::execution::par_unseq, lhs.data(), lhs.data() + lhs.size(), rhs.data(), result.data(), std::multiplies());
+		}
+
 	}
 }
