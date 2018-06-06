@@ -44,7 +44,15 @@ int main () {
     std::cout << "Fast function application: " <<
         time_function(tc::matrix_ops_f::m_fn<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, double(double)>,
         matrix, output_2, tc::math::sigmoid<double>).count() << " ms\n";
-
     assert(underlying_view_data(output_1) == underlying_view_data(output_2));
+
+    std::cout << "Slow copy: " <<
+        time_function(tc::matrix_ops::m_cpy<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, output_1).count() << " ms\n";
+    std::cout << "Fast copy: " <<
+        time_function(tc::matrix_ops_f::m_cpy<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, output_2).count() << " ms\n";
+    assert(underlying_view_data(output_1) == underlying_view_data(output_2));
+
     return 0;
 }
