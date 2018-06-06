@@ -125,7 +125,7 @@ namespace tc {
 
 		// Vector-vector cross product (3-vectors only).
 		template<class InputVector1, class InputVector2, class OutputVector>
-		void vv_cprod(InputVector1& lhs, InputVector2& rhs, OutputVector result)
+		void vv_cprod(InputVector1& lhs, InputVector2& rhs, OutputVector& result)
 		{
 			#ifdef _DEBUG
 				assert(lhs.size() == 3);
