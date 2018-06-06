@@ -70,6 +70,14 @@ int main () {
         matrix, matrix, output_2).count() << " ms\n";
     assert(underlying_view_data(output_1) == underlying_view_data(output_2));
 
+    std::cout << "Slow subtraction: " <<
+        time_function(tc::matrix_ops::mm_sub<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, matrix, output_1).count() << " ms\n";
+    std::cout << "Fast subtraction: " <<
+        time_function(tc::matrix_ops_f::mm_sub<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, matrix, output_2).count() << " ms\n";
+    assert(underlying_view_data(output_1) == underlying_view_data(output_2));
+
     std::cout << "Slow hadamard: " <<
         time_function(tc::matrix_ops::mm_hprod<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
         matrix, matrix, output_1).count() << " ms\n";
