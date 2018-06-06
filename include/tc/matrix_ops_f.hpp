@@ -4,7 +4,7 @@
 	#include <cassert>		// assert
 #endif
 #include <cstddef>			// std::size_t
-#include <algorithm>		// std::transform, std::copy
+#include <algorithm>		// std::transform, std::copy, std::fill
 #include <execution>		// std::execution::par_unseq
 
 namespace tc {
@@ -19,9 +19,16 @@ namespace tc {
 				assert(in.columns() == out.columns());
 			#endif
 			
-			std::copy(std::excecution::par_unseq, in.data(), in.data() + in.size(), out.data());
+			std::copy(std::execution::par_unseq, in.data(), in.data() + in.size(), out.data());
 		}
 		
+		// Sets all matrix elements to a value.
+		template<typename SizeType = std::size_t, class OutputMatrix, typename Element>
+		void m_fill(OutputMatrix& matrix, Element const& val)
+		{
+			std::fill(std::execution::par_unseq, matrix.data(), matrix.data() + matrix.size(), val);
+		}
+
 		// Transforms each matrix element with a function.
 		template<typename SizeType = std::size_t, class InputMatrix, class OutputMatrix, typename Function>
 		void m_fn(InputMatrix const& in, OutputMatrix& result, Function function)
