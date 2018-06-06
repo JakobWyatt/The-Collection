@@ -168,8 +168,8 @@ namespace tc {
 				assert(rhs.columns() == result.columns());
 			#endif
 			
-			for (SizeType i = 1; i <= lhs.rows(); ++i) {
-				for (SizeType j = 1; j <= lhs.columns(); ++j) {
+			for (SizeType i = 1; i <= rhs.rows(); ++i) {
+				for (SizeType j = 1; j <= rhs.columns(); ++j) {
 					result(i, j) = lhs * rhs(i, j);
 				}
 			}
