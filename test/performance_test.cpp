@@ -54,5 +54,13 @@ int main () {
         matrix, output_2).count() << " ms\n";
     assert(underlying_view_data(output_1) == underlying_view_data(output_2));
 
+    std::cout << "Slow fill: " <<
+        time_function(tc::matrix_ops::m_fill<std::size_t, tc::matrix_view::matrix_view<double>, double>,
+        output_1, 4.6).count() << " ms\n";
+    std::cout << "Fast fill: " <<
+        time_function(tc::matrix_ops_f::m_fill<std::size_t, tc::matrix_view::matrix_view<double>, double>,
+        output_2, 4.6).count() << " ms\n";
+    assert(underlying_view_data(output_1) == underlying_view_data(output_2));
+
     return 0;
 }
