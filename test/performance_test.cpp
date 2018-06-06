@@ -1,16 +1,16 @@
-#include <cassert>
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <chrono>
-#include <utility>
+#include <cassert>
 #include <cstddef>
+#include <chrono>
+#include <iostream>
+#include <utility>
+#include <vector>
+#include "../include/tc/math.hpp"
+#include "../include/tc/matrix_ops.hpp"
+#include "../include/tc/matrix_ops_f.hpp"
 #include "../include/tc/matrix_view.hpp"
 #include "../include/tc/random.hpp"
-#include "../include/tc/matrix_view.hpp"
-#include "../include/tc/matrix_ops.hpp"
-#include "../include/tc/math.hpp"
-#include "../include/tc/matrix_ops_f.hpp"
+
 
 template<typename T>
 std::vector<T> underlying_view_data(tc::matrix_view::matrix_view<T> view) {

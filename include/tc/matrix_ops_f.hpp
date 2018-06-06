@@ -1,10 +1,10 @@
 #pragma once
 
+#include <algorithm>		// std::transform, std::copy, std::fill
 #ifdef _DEBUG
 	#include <cassert>		// assert
 #endif
 #include <cstddef>			// std::size_t
-#include <algorithm>		// std::transform, std::copy, std::fill
 #include <execution>		// std::execution::par_unseq
 #include <functional>		// std::plus, std::multiplies, std::minus
 
