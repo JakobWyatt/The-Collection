@@ -62,5 +62,13 @@ int main () {
         output_2, 4.6).count() << " ms\n";
     assert(underlying_view_data(output_1) == underlying_view_data(output_2));
 
+    std::cout << "Slow addition: " <<
+        time_function(tc::matrix_ops::mm_add<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, matrix, output_1).count() << " ms\n";
+    std::cout << "Fast addition: " <<
+        time_function(tc::matrix_ops_f::mm_add<std::size_t, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>, tc::matrix_view::matrix_view<double>>,
+        matrix, matrix, output_2).count() << " ms\n";
+    assert(underlying_view_data(output_1) == underlying_view_data(output_2));
+
     return 0;
 }
